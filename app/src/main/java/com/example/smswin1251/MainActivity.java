@@ -156,6 +156,13 @@ public class MainActivity extends AppCompatActivity {
             String filePathOffset = "/storage/emulated/0/ham_keys/offset"+phoneNumber;
 
             byte[] key = Files.readAllBytes(Paths.get(filePathKey));
+
+            if(!Files.exists(Paths.get(filePathOffset))){
+                DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePathOffset, false));
+                dos.writeInt(0);
+                dos.close();
+            }
+
             RandomAccessFile raf = new RandomAccessFile(filePathOffset, "r");
             raf.seek(raf.length()-4);
             int offset=raf.readInt();
