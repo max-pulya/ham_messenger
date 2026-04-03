@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.smswin1251">
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+
+    <application
+        android:allowBackup="true"
+        android:label="SMS Win1251"
+        android:theme="@style/Theme.AppCompat.Light">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:taskAffinity="com.example.smswin1251.send"
+            android:launchMode="singleTask"
+            android:icon="@mipmap/ic_sender"
+            android:label="Отправить SMS зашифровано">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MessageDecodeActivity"
+            android:exported="true"
+            android:taskAffinity="com.example.smswin1251.decode"
+            android:launchMode="singleTask"
+            android:icon="@mipmap/ic_decode"
+            android:label="Расшифровать смс">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
