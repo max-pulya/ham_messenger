@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             CheckBox cb=findViewById(R.id.suppress_encryption);
-            boolean useEncryption=cb.isChecked();
+            boolean useEncryption=!cb.isChecked();
 
             byte[] win1251Bytes = message.getBytes("windows-1251");
             byte[] encrypted_bytes;
