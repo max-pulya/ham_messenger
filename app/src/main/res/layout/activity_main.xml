@@ -55,5 +55,9 @@
         android:text="Открыть дешифратор"
         android:padding="12dp"
         android:backgroundTint="#4CAF50"/>
-
+    <CheckBox
+        android:id="@+id/suppress_encryption"
+        android:text="Отправить без шифрования"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"/>
 </LinearLayout>

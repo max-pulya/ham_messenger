@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         checkStoragePermission();
         String phoneNumber = etPhoneNumber.getText().toString().trim();
         String message = etMessage.getText().toString();
+        int offset=0;
 
         if (phoneNumber.isEmpty()) {
             Toast.makeText(this, "Введите номер телефона", Toast.LENGTH_SHORT).show();
@@ -149,32 +151,33 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        try {
-            byte[] win1251Bytes = message.getBytes("windows-1251");
 
+        try {
+            CheckBox cb=findViewById(R.id.suppress_encryption);
+            boolean useEncryption=cb.isChecked();
+
+            byte[] win1251Bytes = message.getBytes("windows-1251");
+            byte[] encrypted_bytes;
             String filePathKey = "/storage/emulated/0/ham_keys/send"+phoneNumber;
             String filePathOffset = "/storage/emulated/0/ham_keys/offset"+phoneNumber;
+            if(useEncryption) {
+                byte[] key = Files.readAllBytes(Paths.get(filePathKey));
 
-            byte[] key = Files.readAllBytes(Paths.get(filePathKey));
+                if (!Files.exists(Paths.get(filePathOffset))) {
+                    DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePathOffset, false));
+                    dos.writeInt(0);
+                    dos.close();
+                }
 
-            if(!Files.exists(Paths.get(filePathOffset))){
-                DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePathOffset, false));
-                dos.writeInt(0);
-                dos.close();
+                RandomAccessFile raf = new RandomAccessFile(filePathOffset, "r");
+                raf.seek(raf.length() - 4);
+                offset = raf.readInt();
+                raf.close();
+
+
+                encrypted_bytes = Util.encrypt(offset, win1251Bytes, key);
             }
-
-            RandomAccessFile raf = new RandomAccessFile(filePathOffset, "r");
-            raf.seek(raf.length()-4);
-            int offset=raf.readInt();
-            raf.close();
-
-            DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePathOffset, true));
-            dos.writeInt(offset+140);
-            dos.close(); //Анти износ флеш памяти. В оригинальной версии сдвиг по ключу хранился в первых четырех байтах самого файла с ключом и перезаписывались одни и те же байты при каждой отправке смс.
-
-
-            byte[] encrypted_bytes= Util.encrypt(offset,win1251Bytes,key);
-
+            else encrypted_bytes=win1251Bytes;
             String convertedMessage = new String(encrypted_bytes, "windows-1251");
 
             SmsManager smsManager = SmsManager.getDefault();
@@ -190,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "SMS отправлено (PDU mode) в кодировке Windows-1251",
                     Toast.LENGTH_LONG).show();
+
+            if(useEncryption) {
+                DataOutputStream dos = new DataOutputStream(new FileOutputStream(filePathOffset, true));
+                dos.writeInt(offset + 140 * parts.size());
+                dos.close(); //Анти износ флеш памяти. В оригинальной версии сдвиг по ключу хранился в первых четырех байтах самого файла с ключом и перезаписывались одни и те же байты при каждой отправке смс.
+            }
 
             etMessage.setText("");
         } catch (UnsupportedEncodingException e) {
