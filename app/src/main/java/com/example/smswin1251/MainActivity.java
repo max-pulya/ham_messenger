@@ -29,6 +29,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.nio.charset.Charset;
+import threegpp.charset.ucs2.UCS2Charset80;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 encrypted_bytes = Util.encrypt(offset, win1251Bytes, key);
             }
             else encrypted_bytes=win1251Bytes;
-            String convertedMessage = new String(encrypted_bytes, "windows-1251");
+            String convertedMessage = new String(encrypted_bytes, "cp1251");
 
             SmsManager smsManager = SmsManager.getDefault();
 

@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.github.brake.threegpp:telecom-charsets:1.0.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
