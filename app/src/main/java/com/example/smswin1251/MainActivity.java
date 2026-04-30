@@ -30,7 +30,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.nio.charset.Charset;
-import threegpp.charset.ucs2.UCS2Charset80;
+
+import threegpp.charset.gsm.GSM7BitPackedCharset;
+import threegpp.charset.gsm.GSMCharset;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkSmsPermission()) {
-                    sendSmsWithPDU();
+                    sendSms();
                 } else {
                     requestSmsPermission();
                 }
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == SMS_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                sendSmsWithPDU();
+                sendSms();
             } else {
                 Toast.makeText(this, "Разрешение на отправку SMS не получено",
                         Toast.LENGTH_SHORT).show();
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @SuppressLint("NewApi")
-    private void sendSmsWithPDU() {
+    private void sendSms() {
         checkStoragePermission();
         String phoneNumber = etPhoneNumber.getText().toString().trim();
         String message = etMessage.getText().toString();
@@ -180,18 +182,16 @@ public class MainActivity extends AppCompatActivity {
                 encrypted_bytes = Util.encrypt(offset, win1251Bytes, key);
             }
             else encrypted_bytes=win1251Bytes;
-            String convertedMessage = new String(encrypted_bytes, "cp1251");
+            Charset gsm7bit = new GSM7BitPackedCharset();
+            String convertedMessage = new String(encrypted_bytes, gsm7bit);
 
             SmsManager smsManager = SmsManager.getDefault();
 
             ArrayList<String> parts = smsManager.divideMessage(convertedMessage);
-            ArrayList<String> encodedParts = new ArrayList<>();
-
-            for (String part : parts) {
-                encodedParts.add(part);
-            }
-
-            smsManager.sendMultipartTextMessage(phoneNumber, null, encodedParts, null, null);
+            //etMessage.setText(convertedMessage);
+            System.out.println("Sms count");
+            System.out.println(parts.size());
+            smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
 
             Toast.makeText(this, "SMS отправлено (PDU mode) в кодировке Windows-1251",
                     Toast.LENGTH_LONG).show();
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 dos.close(); //Анти износ флеш памяти. В оригинальной версии сдвиг по ключу хранился в первых четырех байтах самого файла с ключом и перезаписывались одни и те же байты при каждой отправке смс.
             }
 
-            etMessage.setText("");
+            //etMessage.setText("");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             Toast.makeText(this, "Ошибка кодировки: " + e.getMessage(),

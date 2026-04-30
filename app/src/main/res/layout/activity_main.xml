@@ -1,63 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Отправка SMS в кодировке Windows-1251"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
-
-    <EditText
-        android:id="@+id/etPhoneNumber"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите номер телефона"
-        android:inputType="phone"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/etMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Введите сообщение"
-        android:inputType="textMultiLine"
-        android:minLines="4"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отправка SMS в кодировке Windows-1251"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
 
-    <Button
-        android:id="@+id/btnSendSms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Отправить SMS"
-        android:padding="12dp"
-        android:backgroundTint="#4CAF50"/>
+        <EditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Введите номер телефона"
+            android:inputType="phone"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Поддерживаются русские буквы в кодировке Windows-1251"
-        android:textSize="12sp"
-        android:textColor="#888888"
-        android:layout_marginTop="24dp"/>
-    <Button
-        android:id="@+id/open_decode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Открыть дешифратор"
-        android:padding="12dp"
-        android:backgroundTint="#4CAF50"/>
-    <CheckBox
-        android:id="@+id/suppress_encryption"
-        android:text="Отправить без шифрования"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
-</LinearLayout>
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Введите сообщение"
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btnSendSms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отправить SMS"
+            android:padding="12dp"
+            android:backgroundTint="#4CAF50"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Поддерживаются русские буквы в кодировке Windows-1251"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_marginTop="24dp"/>
+        <Button
+            android:id="@+id/open_decode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Открыть дешифратор"
+            android:padding="12dp"
+            android:backgroundTint="#4CAF50"/>
+        <CheckBox
+            android:id="@+id/suppress_encryption"
+            android:text="Отправить без шифрования"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

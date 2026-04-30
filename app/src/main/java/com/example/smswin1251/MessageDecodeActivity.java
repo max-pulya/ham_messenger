@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+
+import threegpp.charset.gsm.GSM7BitPackedCharset;
+import threegpp.charset.gsm.GSMCharset;
 
 public class MessageDecodeActivity extends AppCompatActivity {
     private EditText etMessage;
@@ -42,15 +47,29 @@ public class MessageDecodeActivity extends AppCompatActivity {
             @Override
             @SuppressLint("NewApi")
             public void afterTextChanged(Editable s) {
+                byte[] key;
+                byte[] decryptedBytes;
+                byte[] encryptedBytes;
+                Charset gsm7bit = new GSM7BitPackedCharset();
+
+                CheckBox cb=findViewById(R.id.suppress_encryption);
+                boolean useEncryption=!cb.isChecked();
+
                 try {
-                    String filePath = "/storage/emulated/0/ham_keys/receive"+etMessagePhoneNumber.getText();
-                    byte[] key = Files.readAllBytes(Paths.get(filePath));
-                    byte[] encryptedBytes = etMessage.getText().toString().getBytes("windows-1251");
-                    byte[] decryptedBytes = Util.encrypt(Long.parseLong(etMessageNumber.getText().toString())*140,encryptedBytes,key);
+
+                    encryptedBytes = etMessage.getText().toString().getBytes(gsm7bit);
+
+                    System.out.println(Arrays.toString(encryptedBytes));
+                    if(useEncryption){
+                        String filePath = "/storage/emulated/0/ham_keys/receive"+etMessagePhoneNumber.getText();
+                        key = Files.readAllBytes(Paths.get(filePath));
+                        decryptedBytes = Util.encrypt(Long.parseLong(etMessageNumber.getText().toString())*140,encryptedBytes,key);}
+                    else decryptedBytes = encryptedBytes;
                     decoded.setText(new String(decryptedBytes, Charset.forName("Cp1251")));
 
                 }
                 catch (Exception e){
+                    e.printStackTrace();
                     decoded.setText("Ключ отсутствует или закончился");
                 }
 

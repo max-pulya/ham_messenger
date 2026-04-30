@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    layout_width="match_parent"
-    layout_height="wrap_content"
-    android:orientation="vertical"
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        layout_width="match_parent"
+        layout_height="wrap_content"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/EditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Текст сообщения"
-/>
+        <EditText
+            android:id="@+id/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Текст сообщения" />
 
-    <EditText
-        android:id="@+id/EditText2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Номер сообщения" />
-    <EditText
-        android:id="@+id/EditText3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Номер телефона" />
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Расшифрованное сообщение" />
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <EditText
+            android:id="@+id/EditText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Номер сообщения" />
+        <EditText
+            android:id="@+id/EditText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Номер телефона" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Расшифрованное сообщение" />
+        <CheckBox
+            android:id="@+id/suppress_encryption"
+            android:text="Прочитать нешифровнное смс"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>
