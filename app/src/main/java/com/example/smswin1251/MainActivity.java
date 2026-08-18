@@ -1,5 +1,6 @@
 package com.example.smswin1251;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,10 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +35,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.nio.charset.Charset;
 
+
+
 import threegpp.charset.gsm.GSM7BitPackedCharset;
 import threegpp.charset.gsm.GSMCharset;
 
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etMessage;
     private Button btnSendSms;
     private Button btnOpenDecrypt;
+    private TextView smsLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +59,23 @@ public class MainActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         btnSendSms = findViewById(R.id.btnSendSms);
         btnOpenDecrypt = findViewById(R.id.open_decode);
+        smsLength = findViewById(R.id.sms_length);
+        etMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                smsLength.setText(getSmsLength());
+            }
+        });
         btnSendSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
             boolean useEncryption=!cb.isChecked();
 
             byte[] win1251Bytes = message.getBytes("windows-1251");
+            win1251Bytes=Util.compress(win1251Bytes);
             byte[] encrypted_bytes;
             String filePathKey = "/storage/emulated/0/ham_keys/send"+phoneNumber;
             String filePathOffset = "/storage/emulated/0/ham_keys/offset"+phoneNumber;
@@ -193,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(parts.size());
             smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
 
-            Toast.makeText(this, "SMS отправлено (PDU mode) в кодировке Windows-1251",
+            Toast.makeText(this, "SMS отправлено (text mode). Применена смена кодировки и сжатие",
                     Toast.LENGTH_LONG).show();
 
             if(useEncryption) {
@@ -212,5 +236,30 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Ошибка отправки: " + e.getMessage(),
                     Toast.LENGTH_LONG).show();
         }
+    }
+    @SuppressLint("NewApi")
+    private String getSmsLength() {
+        String message = etMessage.getText().toString();
+        if (message.isEmpty()) {
+            return null;
+        }
+        try {
+
+            byte[] win1251Bytes = message.getBytes("windows-1251");
+            win1251Bytes=Util.compress(win1251Bytes);
+            Charset gsm7bit = new GSM7BitPackedCharset();
+            String convertedMessage = new String(win1251Bytes, gsm7bit);
+
+            SmsManager smsManager = SmsManager.getDefault();
+
+            ArrayList<String> parts = smsManager.divideMessage(convertedMessage);
+            return "Кол-во смс/осталось выходных символов в последней смс:  "+Integer.toString(parts.size())+"/"+Integer.toString((160-parts.get(parts.size()-1).length()));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Ошибка кодировки: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            return null;
+        }
+
     }
 }

@@ -65,12 +65,13 @@ public class MessageDecodeActivity extends AppCompatActivity {
                         key = Files.readAllBytes(Paths.get(filePath));
                         decryptedBytes = Util.encrypt(Long.parseLong(etMessageNumber.getText().toString())*140,encryptedBytes,key);}
                     else decryptedBytes = encryptedBytes;
+                    decryptedBytes=Util.decompress(decryptedBytes);
                     decoded.setText(new String(decryptedBytes, Charset.forName("Cp1251")));
 
                 }
                 catch (Exception e){
                     e.printStackTrace();
-                    decoded.setText("Ключ отсутствует или закончился");
+                    decoded.setText("Ключ отсутствует или закончился или ошибка при распаковке. Код ошибки:"+e.getMessage());
                 }
 
             }
