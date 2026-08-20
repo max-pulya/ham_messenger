@@ -10,24 +10,20 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/linearLayout">
 
-        <EditText
-            android:id="@+id/EditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Текст сообщения" />
 
         <EditText
             android:id="@+id/EditText2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Номер сообщения" />
+            android:hint="Номер сообщения" />
         <EditText
             android:id="@+id/EditText3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Номер телефона" />
+            android:hint="Номер телефона" />
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -38,5 +34,10 @@
             android:text="Прочитать нешифровнное смс"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
+        <EditText
+            android:id="@+id/editTextMessagePart1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Текст сообщения 0" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </ScrollView>
