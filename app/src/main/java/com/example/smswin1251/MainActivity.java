@@ -211,12 +211,13 @@ public class MainActivity extends AppCompatActivity {
 
             SmsManager smsManager = SmsManager.getDefault();
 
-            ArrayList<String> parts = smsManager.divideMessage(convertedMessage);
+            ArrayList<String> parts = Util.divideMessage(convertedMessage);
             //etMessage.setText(convertedMessage);
             System.out.println("Sms count");
             System.out.println(parts.size());
-            smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
-
+            for(String i: parts) {
+                smsManager.sendTextMessage(phoneNumber, null, i, null, null);
+            }
             Toast.makeText(this, "SMS отправлено (text mode). Применена смена кодировки и сжатие",
                     Toast.LENGTH_LONG).show();
 
@@ -252,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
             SmsManager smsManager = SmsManager.getDefault();
 
-            ArrayList<String> parts = smsManager.divideMessage(convertedMessage);
+            ArrayList<String> parts = Util.divideMessage(convertedMessage);
             return "Кол-во смс/осталось выходных символов в последней смс:  "+Integer.toString(parts.size())+"/"+Integer.toString((160-parts.get(parts.size()-1).length()));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
