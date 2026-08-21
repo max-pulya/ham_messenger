@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
 
 import threegpp.charset.gsm.GSM7BitPackedCharset;
 
@@ -26,6 +28,9 @@ public class MessageDecodeActivity extends AppCompatActivity {
     private EditText etMessageNumber;
     private EditText etMessagePhoneNumber;
     private LinearLayoutCompat linearLayout;
+    private TextView animationTextView;
+    private Timer animTimer;
+    private Animation animation;
     TextWatcher t;
 
     private TextView decoded;
@@ -95,5 +100,27 @@ public class MessageDecodeActivity extends AppCompatActivity {
         };
         for(EditText i: etMessages)i.addTextChangedListener(t);
         etMessageNumber.addTextChangedListener(t);
+
+
+        animationTextView=findViewById(R.id.animation);
+        animationTextView.setText("       ___\n" +
+                " \\ /   \\ /  |\\ /|\n" +
+                "  -    ---  |   |\n" +
+                " / \\   / \\  |   |\n");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        animTimer.cancel();
+        animation=null;
+    }
+
+    @Override
+    protected void onResume() {
+        animation=new Animation();
+        super.onResume();
+        Log.i("anim_mainActivity", "onResume");
+        animTimer=new Timer();
+        animTimer.schedule(animation.getTimerTask(animationTextView, this),0,50);
     }
 }

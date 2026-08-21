@@ -14,6 +14,14 @@
         android:id="@+id/linearLayout">
 
 
+        <TextView
+            android:id="@+id/animation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textColor="#FF0000"
+            android:textAlignment="viewStart"
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/EditText2"
             android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,19 +27,16 @@ import androidx.core.content.ContextCompat;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.nio.charset.Charset;
-
+import java.util.Timer;
 
 
 import threegpp.charset.gsm.GSM7BitPackedCharset;
-import threegpp.charset.gsm.GSMCharset;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,12 +47,19 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSendSms;
     private Button btnOpenDecrypt;
     private TextView smsLength;
+    private TextView animationTextView;
+    private Timer animTimer;
+    private Animation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        animationTextView =findViewById(R.id.animation);
+        animationTextView.setText("       ___\n" +
+                " \\ /   \\ /  |\\ /|\n" +
+                "  -    ---  |   |\n" +
+                " / \\   / \\  |   |\n");
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         etMessage = findViewById(R.id.etMessage);
         btnSendSms = findViewById(R.id.btnSendSms);
@@ -262,5 +267,21 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        animTimer.cancel();
+        animation=null;
+    }
+
+    @Override
+    protected void onResume() {
+        animation=new Animation();
+        super.onResume();
+        Log.i("anim_mainActivity", "onResume");
+        animTimer=new Timer();
+        animTimer.schedule(animation.getTimerTask(animationTextView, this),0,50);
     }
 }
