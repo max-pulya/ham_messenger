@@ -9,7 +9,7 @@ public class Animation {
     int cnt=0;
     int animNumber=0;
     Runnable runnable=null;
-    public String[] rotating_text={
+    static final String[] rotating_text={
         "       ___\n" +
         " \\ /   \\ /  |\\ /|\n" +
         "  -    ---  |   |\n" +
@@ -45,21 +45,21 @@ public class Animation {
         "|   |  ---    -\n" +
         "|   |  / \\   / \\\n\n"
     };
-    String[] mask ={
+    static final String[] mask ={
             " ___   ___   ___ ",
             "|\\|/| |\\|/| |\\|/|",
             "|---| |---| |---|",
             "|/|\\| |/|\\| |/|\\|",
             " ---   ---   --- "
     };
-    String[] masksony ={
-            " _     _     _  ",
+    static final String[] masksony ={
+            " _     _     _   ",
             "| |   | |   | |  ",
             " - -   - -   - - ",
             "  | |   | |   | |",
             "   -     -     - "
     };
-    String[] ham ={
+    static final String[] ham ={
             "       ___       ",
             " \\ /   \\ /  |\\ /|",
             "  -    ---  |   |",
@@ -75,10 +75,10 @@ public class Animation {
                     runnable = new Runnable(){
                         @Override
                         public void run() {
+                            int masklength;
+                            String animFrame="";
                             switch (animNumber){
                                 case 0:
-                                    int masklength;
-                                    String animFrame="";
                                     if (cnt<=17)masklength=cnt;
                                     else if (cnt<=35) masklength=35-cnt;
                                     else masklength=0;
@@ -107,7 +107,28 @@ public class Animation {
                                     cnt+=1;
                                     if (cnt>=134) {
                                         cnt = 0;
-                                        animNumber = 0;
+                                        animNumber = 2;
+                                    }
+                                    break;
+                                case 2:
+                                    if (cnt<=17)masklength=cnt;
+                                    else if (cnt<=35) masklength=35-cnt;
+                                    else masklength=0;
+                                    for (int i=0;i<5;i++){
+                                        animFrame+=masksony[i].subSequence(0,masklength);
+                                        if (masklength!=0) {
+                                            animFrame+="  ";
+                                            animFrame+=ham[i].subSequence(Integer.min(masklength+2,17),17);
+
+                                        }
+                                        else animFrame+=ham[i];
+                                        animFrame+="\n";
+                                    }
+                                    anim.setText(animFrame);
+                                    cnt+=1;
+                                    if (cnt>70){
+                                        cnt=0;
+                                        animNumber=0;
                                     }
                                     break;
 
